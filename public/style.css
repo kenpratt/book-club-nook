@@ -8,6 +8,7 @@ ul.book-list {
 }
 
 li.book-item {
+    position: relative;
     margin: 0;
     padding: 10px;
     overflow: hidden;
@@ -31,8 +32,9 @@ li.book-item:last-of-type {
     margin: 0 0 0.25em 0;
     font-size: 1.2em;
 }
+
 .author {
-    margin: 0 0 0.25em 0;
+    margin: 0 0 0.35em 0;
     font-size: 1em;
 }
 
@@ -40,6 +42,17 @@ li.book-item:last-of-type {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.metadata {
+    position: absolute;
+    bottom: 10px;
+    left: 85px;
+}
+
+.availability .holds {
+    font-size: 0.8em;
+    padding-left: 0.4em;
 }
 
 .availability, .fiction, .vpl-rating, .amazon-rating, .goodreads-rating {
@@ -61,4 +74,39 @@ li.book-item:last-of-type {
 }
 .goodreads-rating a {
     background-image: url(images/goodreads.png);
+}
+
+.rating {
+    display: inline-block;
+    width: 91px;
+    height: 12px;
+    background: url(images/star_empty.png) repeat-x;
+    position: relative;
+}
+.rating .stars-1, .rating .stars-2, .rating .stars-3, .rating .stars-4, .rating .stars-5, .rating .stars-6, .rating .stars-7 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 13px;
+    height: 12px;
+    background: url(images/star_full.png) repeat-x;
+}
+.rating .stars-2 {
+    width: 26px;
+}
+.rating .stars-3 {
+    width: 39px;
+}
+.rating .stars-4 {
+    width: 52px;
+}
+.rating .stars-5 {
+    width: 65px;
+}
+.rating .stars-6 {
+    width: 78px;
+}
+.rating .stars-7 {
+    width: 91px;
 }
