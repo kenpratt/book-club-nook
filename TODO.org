@@ -1,0 +1,4 @@
+* TODO Find book club-centric site(s) to pull data from?
+* TODO Pull more data from Amazon/Goodreads (what?)
+* TODO Calculate ratings variance from Amazon or Goodreads, sort by that (idea is higher variance may be a better book club book)
+* TODO "Starring" that uses localStorage, filter to starred items

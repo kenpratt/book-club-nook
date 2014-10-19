@@ -22,6 +22,7 @@ def main
   save_books
   generate_csv
   generate_json
+  generate_js
 end
 
 def update_data
@@ -180,6 +181,14 @@ end
 
 def generate_json
   File.open("books.json", "w") {|f| f << $books.to_json }
+end
+
+def generate_js
+  File.open("public/books.js", "w") do |f|
+    f << "window.bookData = "
+    f << $books.to_json
+    f << ";\n"
+  end
 end
 
 main

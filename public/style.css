@@ -1,0 +1,64 @@
+body {
+}
+
+ul.book-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li.book-item {
+    margin: 0;
+    padding: 10px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-bottom: 0;
+}
+li.book-item:last-of-type {
+    border: 1px solid #ccc;
+}
+
+.cover {
+    margin-right: 10px;
+    float: left;
+}
+.cover img {
+    height: 100px;
+    width: 65px;
+}
+
+.title {
+    margin: 0 0 0.25em 0;
+    font-size: 1.2em;
+}
+.author {
+    margin: 0 0 0.25em 0;
+    font-size: 1em;
+}
+
+.description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.availability, .fiction, .vpl-rating, .amazon-rating, .goodreads-rating {
+    float: left;
+    margin-right: 1em;
+}
+
+.vpl-rating a, .amazon-rating a, .goodreads-rating a {
+    padding-left: 18px;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+.vpl-rating a {
+    background-image: url(images/vpl.png);
+}
+.amazon-rating a {
+    background-image: url(images/amazon.png);
+}
+.goodreads-rating a {
+    background-image: url(images/goodreads.png);
+}
