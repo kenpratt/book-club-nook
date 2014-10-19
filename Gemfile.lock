@@ -1,0 +1,25 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    amazon-ecs (2.2.5)
+      nokogiri (~> 1.4)
+      ruby-hmac (~> 0.3)
+    coderay (1.1.0)
+    method_source (0.8.2)
+    mini_portile (0.6.0)
+    nokogiri (1.6.3.1)
+      mini_portile (= 0.6.0)
+    pry (0.9.12.4)
+      coderay (~> 1.0)
+      method_source (~> 0.8)
+      slop (~> 3.4)
+    ruby-hmac (0.4.0)
+    slop (3.4.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  amazon-ecs
+  nokogiri
+  pry

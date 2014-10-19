@@ -1,0 +1,5 @@
+books.*
+samples
+config.yml
+.DS_Store
+.#*
