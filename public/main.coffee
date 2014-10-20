@@ -62,7 +62,7 @@ BookListItem = React.createClass
 
   renderRating: (val, outOf) ->
     if val?
-      stars = Math.ceil(val / outOf * 7)
+      stars = Math.round(val / outOf * 6) + 1
       React.DOM.span className: "rating",
         React.DOM.span className: "stars-#{stars}"
     else
