@@ -19,13 +19,17 @@ BookListItem = React.createClass
         React.DOM.a href: vpl_url, className: "vpl-link", title
       React.DOM.h4 className: "author", author
       React.DOM.div className: "description", description or " "
+      React.DOM.ul className: "categories",
+        if goodreads_categories
+          for c in goodreads_categories when !(c in ["to-read", "currently-reading", "fiction", "non-fiction", "nonfiction", "book-club", "favorites", "novels", "novel", "before-goodreads", "to-buy", "finished"])
+            React.DOM.li null, c
       React.DOM.div className: "metadata",
         React.DOM.div className: "availability",
           "Available: #{if available then "Yes" else "No"}"
           React.DOM.span className: "holds", "(#{holds.replace(/Holds: (\d+)/, '$1 holds')})" if holds
         React.DOM.div className: "fiction", "Fiction: #{if fiction then "Yes" else "No"}"
-        React.DOM.div className: "vpl-rating",
-          React.DOM.a href: vpl_url, @renderRating(vpl_rating, 100)
+        # React.DOM.div className: "vpl-rating",
+        #   React.DOM.a href: vpl_url, @renderRating(vpl_rating, 100)
         React.DOM.div className: "amazon-rating",
           React.DOM.a href: amazon_url, @renderRating(amazon_rating, 1)
         React.DOM.div className: "goodreads-rating",
