@@ -1,8 +1,13 @@
 * TODO Deploy & set up cron job to update data hourly
-* TODO Filter out books we've already read
+* TODO Full-text search (on titles, authors, descriptions, tags)
 * TODO Show rest of description on click/hover
-* TODO Search
+* TODO Filter out books we've already read
 * TODO Find book club-centric site(s) to pull data from?
-* TODO Pull more data from Amazon/Goodreads (what?)
+** TODO LitLovers badges http://www.litlovers.com/popular-book-club-books#top-50 http://www.litlovers.com/popular-books-2
+* TODO Pull more data from Amazon/Goodreads (what info?)
 * TODO Calculate ratings variance from Amazon or Goodreads, sort by that (idea is higher variance may be a better book club book)
-* TODO "Starring" that uses localStorage, filter to starred items
+* TODO "Starring" that uses localStorage and/or url, filter to starred items
+* TODO Persist settings to localStorage as well as URL
+* TODO Try to get decent VPL ratings (detect data clashes and pick a winner?)
+* TODO Concat and minify JS (and compile coffee?)
+* TODO Sprite images
