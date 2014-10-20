@@ -30,6 +30,7 @@ BookApp = React.createClass
 
   render: ->
     React.DOM.div className: "app",
+      React.DOM.h1 null, "VPL Book Club Sets"
       Settings(settings: @state.settings)
       BookList(books: @state.books, sort: @state.settings.sort, onlyfiction: @state.settings.onlyfiction, onlyavailable: @state.settings.onlyavailable)
 

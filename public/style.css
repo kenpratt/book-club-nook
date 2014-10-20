@@ -1,12 +1,35 @@
 body {
+    background: tan;
+}
+
+h1 {
+    float: left;
+    margin: 0 0 16px 0;
+    font-size: 2.5em;
+    line-height: 1;
+    color: rgb(102, 83, 14);
+    letter-spacing: -1px;
+    background: url(images/logo.png) no-repeat top left;
+    padding-left: 120px;
+    height: 100px;
+    line-height: 100px;
 }
 
 .app {
     padding: 16px;
 }
 
+.settings, .book-list {
+    background: white;
+    border-radius: 10px;
+}
+
 .settings {
+    padding: 10px;
     margin-bottom: 16px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    float: right;
 }
 .settings label {
     font-size: 0.9;
@@ -14,9 +37,11 @@ body {
 }
 
 ul.book-list {
+    clear: both;
     list-style-type: none;
     margin: 0;
     padding: 0;
+    border: 1px solid #ccc;
 }
 
 li.book-item {
@@ -24,11 +49,10 @@ li.book-item {
     margin: 0;
     padding: 10px;
     overflow: hidden;
-    border: 1px solid #ccc;
-    border-bottom: 0;
+    border-bottom: 1px solid #ccc;
 }
 li.book-item:last-of-type {
-    border: 1px solid #ccc;
+    border-bottom: 0;
 }
 
 .cover {
