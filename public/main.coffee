@@ -1,9 +1,31 @@
+BookApp = React.createClass
+  displayName: "BookApp"
+
+  getInitialState: ->
+    books: _.values(bookData)
+    settings:
+      sort_by: "title"
+
+  componentWillMount: ->
+    window.onhashchange = =>
+      @setState settings: _.extend({}, @state.settings, getHash())
+
+  render: ->
+    React.DOM.div className: "app",
+      Settings(settings: @state.settings)
+      BookList(books: @state.books, sort_by: @state.settings.sort_by)
+
 BookList = React.createClass
   displayName: "BookList"
 
   render: ->
+    sortedBooks = _.sortBy @props.books, (b) =>
+      if @props.sort_by.indexOf("rating") isnt -1
+        -b[@props.sort_by]
+      else
+        b[@props.sort_by]
     React.DOM.ul className: "book-list",
-      BookListItem(key: id, book: book) for id, book of @props.books
+      BookListItem(key: id, book: book) for id, book of sortedBooks
 
 BookListItem = React.createClass
   displayName: "BookListItem"
@@ -22,7 +44,7 @@ BookListItem = React.createClass
       React.DOM.ul className: "categories",
         if goodreads_categories
           for c in goodreads_categories when !(c in ["to-read", "currently-reading", "fiction", "non-fiction", "nonfiction", "book-club", "favorites", "novels", "novel", "before-goodreads", "to-buy", "finished"])
-            React.DOM.li null, c
+            React.DOM.li key: c, c
       React.DOM.div className: "metadata",
         React.DOM.div className: "availability",
           React.DOM.span className: "yesno #{if available then 'yes' else 'no'}", "Available:"
@@ -43,6 +65,46 @@ BookListItem = React.createClass
     else
       "-"
 
+Settings = React.createClass
+  displayName: "Settings"
+
+  render: ->
+    React.DOM.div className: "settings",
+      SortFieldChooser(field: @props.sort_by)
+
+SortFieldChooser = React.createClass
+  displayName: "SortFieldChooser"
+
+  render: ->
+    React.DOM.select className: "sortFieldChooser", onChange: @handleChange,
+      for [key, name] in SORT_FIELDS
+        React.DOM.option _.extend({ key: key, value: key }, if key is @props.sort_by then { selected: "selected" } else {}), name
+
+  handleChange: (ev) ->
+    updateHash "sort_by", ev.target.value
+
+SORT_FIELDS = [
+  ["title", "Title"]
+  ["author", "Author"]
+  ["amazon_rating", "Amazon Rating"]
+  ["goodreads_rating", "Goodreads Rating"]
+]
+
+getHash = ->
+  if (h = window.location.hash) and !_.isEmpty(h)
+    out = {}
+    for s in h[1..].split("&")
+      [k, v] = s.split("=")
+      out[k] = v
+    out
+  else
+    {}
+
+updateHash = (key, val) ->
+  h = getHash()
+  h[key] = val
+  window.location.hash = "#" + ("#{k}=#{v}" for k, v of h).join("&")
+
 $(document).ready ->
   for id, book of bookData
     book.vpl_url = "http://vpl.bibliocommons.com#{book.vpl_url}"
@@ -59,4 +121,4 @@ $(document).ready ->
       else
         false
 
-  React.renderComponent(BookList(books: _.values(bookData)), $("#bookList")[0])
+  React.renderComponent(BookApp(), $("body")[0])

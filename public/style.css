@@ -1,6 +1,14 @@
 body {
 }
 
+.app {
+    padding: 16px;
+}
+
+.settings {
+    margin-bottom: 16px;
+}
+
 ul.book-list {
     list-style-type: none;
     margin: 0;
