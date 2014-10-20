@@ -1,6 +1,7 @@
 DEFAULT_SETTINGS =
   sort: "goodreads_rating"
   onlyfiction: "yes"
+  onlyavailable: "no"
 
 SORT_FIELDS = [
   ["goodreads_rating", "Goodreads Rating"]
@@ -30,7 +31,7 @@ BookApp = React.createClass
   render: ->
     React.DOM.div className: "app",
       Settings(settings: @state.settings)
-      BookList(books: @state.books, sort: @state.settings.sort, onlyfiction: @state.settings.onlyfiction)
+      BookList(books: @state.books, sort: @state.settings.sort, onlyfiction: @state.settings.onlyfiction, onlyavailable: @state.settings.onlyavailable)
 
 BookList = React.createClass
   displayName: "BookList"
@@ -38,6 +39,7 @@ BookList = React.createClass
   render: ->
     books = @props.books
     books = (b for b in books when b.fiction) if @props.onlyfiction is "yes"
+    books = (b for b in books when b.available) if @props.onlyavailable is "yes"
     books = _.sortBy books, (b) =>
       if @props.sort.indexOf("rating") isnt -1
         -b[@props.sort]
@@ -45,13 +47,13 @@ BookList = React.createClass
         b[@props.sort]
 
     React.DOM.ul className: "book-list",
-      BookListItem(key: book.vpl_id, book: book, showFiction: @props.onlyfiction is "no") for id, book of books
+      BookListItem(key: book.vpl_id, book: book, showFiction: @props.onlyfiction is "no", showAvailability: @props.onlyavailable is "no") for id, book of books
 
 BookListItem = React.createClass
   displayName: "BookListItem"
 
   shouldComponentUpdate: (nextProps, nextState) ->
-    @props.book isnt nextProps.book or @props.showFiction isnt nextProps.showFiction
+    @props.book isnt nextProps.book or @props.showFiction isnt nextProps.showFiction or @props.showAvailability isnt nextProps.showAvailability
 
   render: ->
     { vpl_id, title, vpl_url, author, availability, available, availability_url, holds, vpl_rating, isbn, img, goodreads_id, goodreads_url, goodreads_rating, amazon_url, amazon_rating, goodreads_categories, description, fiction } = @props.book
@@ -69,9 +71,10 @@ BookListItem = React.createClass
           for c in goodreads_categories when !(c in ["to-read", "currently-reading", "fiction", "non-fiction", "nonfiction", "book-club", "favorites", "novels", "novel", "before-goodreads", "to-buy", "finished"])
             React.DOM.li key: c, c
       React.DOM.div className: "metadata",
-        React.DOM.div className: "availability",
-          React.DOM.span className: "yesno #{if available then 'yes' else 'no'}", "Available:"
-          React.DOM.span className: "holds", "(#{holds.replace(/Holds: (\d+)/, '$1 holds')})" if holds
+        if @props.showAvailability
+          React.DOM.div className: "availability",
+            React.DOM.span className: "yesno #{if available then 'yes' else 'no'}", "Available:"
+            React.DOM.span className: "holds", "(#{holds.replace(/Holds: (\d+)/, '$1 holds')})" if holds
         if @props.showFiction
           React.DOM.div className: "fiction yesno #{if fiction then 'yes' else 'no'}", "Fiction:"
         # React.DOM.div className: "vpl-rating",
@@ -96,6 +99,7 @@ Settings = React.createClass
     React.DOM.form className: "settings",
       Dropdown(key: "sort", id: "sort-setting", value: @props.settings.sort, label: "Sort by:", options: SORT_FIELDS)
       Checkbox(key: "onlyfiction", id: "only-fiction-setting", value: @props.settings.onlyfiction, label: "Fiction only?")
+      Checkbox(key: "onlyavailable", id: "only-available-setting", value: @props.settings.onlyavailable, label: "Available sets only?")
 
 Dropdown = React.createClass
   displayName: "Dropdown"
