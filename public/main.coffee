@@ -25,10 +25,13 @@ BookList = React.createClass
       else
         b[@props.sort_by]
     React.DOM.ul className: "book-list",
-      BookListItem(key: id, book: book) for id, book of sortedBooks
+      BookListItem(key: book.vpl_id, book: book) for id, book of sortedBooks
 
 BookListItem = React.createClass
   displayName: "BookListItem"
+
+  shouldComponentUpdate: (nextProps, nextState) ->
+    @props.book isnt nextProps.book
 
   render: ->
     { vpl_id, title, vpl_url, author, availability, available, availability_url, holds, vpl_rating, isbn, img, goodreads_id, goodreads_url, goodreads_rating, amazon_url, amazon_rating, goodreads_categories, description, fiction } = @props.book
