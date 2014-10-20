@@ -3,12 +3,17 @@ BookApp = React.createClass
 
   getInitialState: ->
     books: _.values(bookData)
-    settings:
-      sort_by: "title"
+    settings: @currentSettings()
+
+  currentSettings: ->
+    hash = getHash()
+    {
+      sort_by: hash.sort_by or "title"
+    }
 
   componentWillMount: ->
     window.onhashchange = =>
-      @setState settings: _.extend({}, @state.settings, getHash())
+      @setState settings: @currentSettings()
 
   render: ->
     React.DOM.div className: "app",
@@ -73,15 +78,17 @@ Settings = React.createClass
 
   render: ->
     React.DOM.div className: "settings",
-      SortFieldChooser(field: @props.sort_by)
+      SortFieldChooser(sort_by: @props.settings.sort_by)
 
 SortFieldChooser = React.createClass
   displayName: "SortFieldChooser"
 
   render: ->
-    React.DOM.select className: "sortFieldChooser", onChange: @handleChange,
-      for [key, name] in SORT_FIELDS
-        React.DOM.option _.extend({ key: key, value: key }, if key is @props.sort_by then { selected: "selected" } else {}), name
+    React.DOM.fieldset null,
+      React.DOM.label htmlFor: "sort-field-chooser", "Sort by:"
+      React.DOM.select id: "sort-field-chooser", className: "sortFieldChooser", value: @props.sort_by, onChange: @handleChange,
+        for [key, name] in SORT_FIELDS
+          React.DOM.option key: key, value: key, name
 
   handleChange: (ev) ->
     updateHash "sort_by", ev.target.value

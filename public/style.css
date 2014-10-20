@@ -8,6 +8,10 @@ body {
 .settings {
     margin-bottom: 16px;
 }
+.settings label {
+    font-size: 0.9;
+    margin-right: 5px;
+}
 
 ul.book-list {
     list-style-type: none;
