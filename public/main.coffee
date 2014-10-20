@@ -45,13 +45,13 @@ BookList = React.createClass
         b[@props.sort]
 
     React.DOM.ul className: "book-list",
-      BookListItem(key: book.vpl_id, book: book) for id, book of books
+      BookListItem(key: book.vpl_id, book: book, showFiction: @props.onlyfiction is "no") for id, book of books
 
 BookListItem = React.createClass
   displayName: "BookListItem"
 
   shouldComponentUpdate: (nextProps, nextState) ->
-    @props.book isnt nextProps.book
+    @props.book isnt nextProps.book or @props.showFiction isnt nextProps.showFiction
 
   render: ->
     { vpl_id, title, vpl_url, author, availability, available, availability_url, holds, vpl_rating, isbn, img, goodreads_id, goodreads_url, goodreads_rating, amazon_url, amazon_rating, goodreads_categories, description, fiction } = @props.book
@@ -72,7 +72,8 @@ BookListItem = React.createClass
         React.DOM.div className: "availability",
           React.DOM.span className: "yesno #{if available then 'yes' else 'no'}", "Available:"
           React.DOM.span className: "holds", "(#{holds.replace(/Holds: (\d+)/, '$1 holds')})" if holds
-        React.DOM.div className: "fiction yesno #{if fiction then 'yes' else 'no'}", "Fiction:"
+        if @props.showFiction
+          React.DOM.div className: "fiction yesno #{if fiction then 'yes' else 'no'}", "Fiction:"
         # React.DOM.div className: "vpl-rating",
         #   React.DOM.a href: vpl_url, @renderRating(vpl_rating, 100)
         React.DOM.div className: "amazon-rating",
