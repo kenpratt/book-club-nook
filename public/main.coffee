@@ -105,7 +105,7 @@ updateHash = (key, val) ->
   h[key] = val
   window.location.hash = "#" + ("#{k}=#{v}" for k, v of h).join("&")
 
-$(document).ready ->
+boot = ->
   for id, book of bookData
     book.vpl_url = "http://vpl.bibliocommons.com#{book.vpl_url}"
     book.goodreads_url = "https://www.goodreads.com/book/show/#{book.goodreads_id}"
@@ -121,4 +121,6 @@ $(document).ready ->
       else
         false
 
-  React.renderComponent(BookApp(), $("body")[0])
+  React.renderComponent(BookApp(), document.getElementsByTagName("body")[0])
+
+boot()
