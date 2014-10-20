@@ -29,19 +29,23 @@ li.book-item:last-of-type {
 }
 
 .title {
-    margin: 0 0 0.25em 0;
+    margin: 0 0 3px 0;
     font-size: 1.2em;
+    line-height: 1;
 }
 
 .author {
-    margin: 0 0 0.35em 0;
+    margin: 0 0 5px 0;
     font-size: 1em;
+    line-height: 1;
 }
 
 .description {
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    height: 40px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .categories {
@@ -50,7 +54,8 @@ li.book-item:last-of-type {
     padding: 0;
     position: absolute;
     bottom: 10px;
-    right: 10px
+    right: 10px;
+    line-height: 1;
 }
 .categories li {
     display: inline-block;
@@ -66,8 +71,12 @@ li.book-item:last-of-type {
     position: absolute;
     bottom: 10px;
     left: 85px;
+    line-height: 1;
 }
 
+.availability, .fiction {
+    font-size: 0.9em;
+}
 .availability .holds {
     font-size: 0.8em;
     padding-left: 0.4em;
