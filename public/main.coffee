@@ -8,7 +8,7 @@ BookApp = React.createClass
   currentSettings: ->
     hash = getHash()
     {
-      sort_by: hash.sort_by or "title"
+      sort: hash.sort or "title"
     }
 
   componentWillMount: ->
@@ -18,17 +18,17 @@ BookApp = React.createClass
   render: ->
     React.DOM.div className: "app",
       Settings(settings: @state.settings)
-      BookList(books: @state.books, sort_by: @state.settings.sort_by)
+      BookList(books: @state.books, sort: @state.settings.sort)
 
 BookList = React.createClass
   displayName: "BookList"
 
   render: ->
     sortedBooks = _.sortBy @props.books, (b) =>
-      if @props.sort_by.indexOf("rating") isnt -1
-        -b[@props.sort_by]
+      if @props.sort.indexOf("rating") isnt -1
+        -b[@props.sort]
       else
-        b[@props.sort_by]
+        b[@props.sort]
     React.DOM.ul className: "book-list",
       BookListItem(key: book.vpl_id, book: book) for id, book of sortedBooks
 
@@ -78,7 +78,7 @@ Settings = React.createClass
 
   render: ->
     React.DOM.div className: "settings",
-      SortFieldChooser(sort_by: @props.settings.sort_by)
+      SortFieldChooser(field: @props.settings.sort)
 
 SortFieldChooser = React.createClass
   displayName: "SortFieldChooser"
@@ -86,12 +86,12 @@ SortFieldChooser = React.createClass
   render: ->
     React.DOM.fieldset null,
       React.DOM.label htmlFor: "sort-field-chooser", "Sort by:"
-      React.DOM.select id: "sort-field-chooser", className: "sortFieldChooser", value: @props.sort_by, onChange: @handleChange,
+      React.DOM.select id: "sort-field-chooser", className: "sortFieldChooser", value: @props.field, onChange: @handleChange,
         for [key, name] in SORT_FIELDS
           React.DOM.option key: key, value: key, name
 
   handleChange: (ev) ->
-    updateHash "sort_by", ev.target.value
+    updateHash "sort", ev.target.value
 
 SORT_FIELDS = [
   ["title", "Title"]
