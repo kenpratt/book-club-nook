@@ -25,9 +25,9 @@ BookListItem = React.createClass
             React.DOM.li null, c
       React.DOM.div className: "metadata",
         React.DOM.div className: "availability",
-          "Available: #{if available then "Yes" else "No"}"
+          React.DOM.span className: "yesno #{if available then 'yes' else 'no'}", "Available:"
           React.DOM.span className: "holds", "(#{holds.replace(/Holds: (\d+)/, '$1 holds')})" if holds
-        React.DOM.div className: "fiction", "Fiction: #{if fiction then "Yes" else "No"}"
+        React.DOM.div className: "fiction yesno #{if fiction then 'yes' else 'no'}", "Fiction:"
         # React.DOM.div className: "vpl-rating",
         #   React.DOM.a href: vpl_url, @renderRating(vpl_rating, 100)
         React.DOM.div className: "amazon-rating",
@@ -47,7 +47,7 @@ $(document).ready ->
   for id, book of bookData
     book.vpl_url = "http://vpl.bibliocommons.com#{book.vpl_url}"
     book.goodreads_url = "https://www.goodreads.com/book/show/#{book.goodreads_id}"
-    book.available = book.availablity == "Available"
+    book.available = book.availability is "Available"
 
     if categories = book.goodreads_categories
       book.fiction = if "non-fiction" in categories or "nonfiction" in categories

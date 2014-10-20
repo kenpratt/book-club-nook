@@ -128,3 +128,16 @@ li.book-item:last-of-type {
 .rating .stars-7 {
     width: 91px;
 }
+
+.yesno {
+    padding-right: 18px;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+.yes {
+    background-image: url(images/yes.png);
+}
+.no {
+    background-image: url(images/no.png);
+}
