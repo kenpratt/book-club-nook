@@ -1,3 +1,14 @@
+DEFAULT_SETTINGS =
+  sort: "goodreads_rating"
+  onlyfiction: "yes"
+
+SORT_FIELDS = [
+  ["goodreads_rating", "Goodreads Rating"]
+  ["amazon_rating", "Amazon Rating"]
+  ["title", "Title"]
+  ["author", "Author"]
+]
+
 BookApp = React.createClass
   displayName: "BookApp"
 
@@ -7,9 +18,10 @@ BookApp = React.createClass
 
   currentSettings: ->
     hash = getHash()
-    {
-      sort: hash.sort or "title"
-    }
+    out = {}
+    for key, val of DEFAULT_SETTINGS
+      out[key] = if hash[key]? then hash[key] else val
+    out
 
   componentWillMount: ->
     window.onhashchange = =>
@@ -18,19 +30,22 @@ BookApp = React.createClass
   render: ->
     React.DOM.div className: "app",
       Settings(settings: @state.settings)
-      BookList(books: @state.books, sort: @state.settings.sort)
+      BookList(books: @state.books, sort: @state.settings.sort, onlyfiction: @state.settings.onlyfiction)
 
 BookList = React.createClass
   displayName: "BookList"
 
   render: ->
-    sortedBooks = _.sortBy @props.books, (b) =>
+    books = @props.books
+    books = (b for b in books when b.fiction) if @props.onlyfiction is "yes"
+    books = _.sortBy books, (b) =>
       if @props.sort.indexOf("rating") isnt -1
         -b[@props.sort]
       else
         b[@props.sort]
+
     React.DOM.ul className: "book-list",
-      BookListItem(key: book.vpl_id, book: book) for id, book of sortedBooks
+      BookListItem(key: book.vpl_id, book: book) for id, book of books
 
 BookListItem = React.createClass
   displayName: "BookListItem"
@@ -77,28 +92,33 @@ Settings = React.createClass
   displayName: "Settings"
 
   render: ->
-    React.DOM.div className: "settings",
-      SortFieldChooser(field: @props.settings.sort)
+    React.DOM.form className: "settings",
+      Dropdown(key: "sort", id: "sort-setting", value: @props.settings.sort, label: "Sort by:", options: SORT_FIELDS)
+      Checkbox(key: "onlyfiction", id: "only-fiction-setting", value: @props.settings.onlyfiction, label: "Fiction only?")
 
-SortFieldChooser = React.createClass
-  displayName: "SortFieldChooser"
+Dropdown = React.createClass
+  displayName: "Dropdown"
 
   render: ->
     React.DOM.fieldset null,
-      React.DOM.label htmlFor: "sort-field-chooser", "Sort by:"
-      React.DOM.select id: "sort-field-chooser", className: "sortFieldChooser", value: @props.field, onChange: @handleChange,
+      React.DOM.label htmlFor: @props.id, @props.label
+      React.DOM.select id: @props.id, value: @props.value, onChange: @handleChange,
         for [key, name] in SORT_FIELDS
           React.DOM.option key: key, value: key, name
 
   handleChange: (ev) ->
-    updateHash "sort", ev.target.value
+    updateHash @props.key, ev.target.value
 
-SORT_FIELDS = [
-  ["title", "Title"]
-  ["author", "Author"]
-  ["amazon_rating", "Amazon Rating"]
-  ["goodreads_rating", "Goodreads Rating"]
-]
+Checkbox = React.createClass
+  displayName: "CheckBox"
+
+  render: ->
+    React.DOM.fieldset null,
+      React.DOM.label htmlFor: @props.id, @props.label
+      React.DOM.input id: @props.id, type: "checkbox", name: @props.key, value: "yes", checked: @props.value is "yes", onChange: @handleChange
+
+  handleChange: (ev) ->
+    updateHash @props.key, if ev.target.checked then "yes" else "no"
 
 getHash = ->
   if (h = window.location.hash) and !_.isEmpty(h)
