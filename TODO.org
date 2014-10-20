@@ -1,4 +1,3 @@
-* TODO Sorting & filtering (use URL?)
 * TODO Show rest of description on click/hover
 * TODO Search
 * TODO Find book club-centric site(s) to pull data from?

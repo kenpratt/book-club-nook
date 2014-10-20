@@ -36,18 +36,33 @@ BookApp = React.createClass
 BookList = React.createClass
   displayName: "BookList"
 
+  getInitialState: ->
+    numToShow: 10
+
   render: ->
     books = @props.books
+
+    # filter
     books = (b for b in books when b.fiction) if @props.onlyfiction is "yes"
     books = (b for b in books when b.available) if @props.onlyavailable is "yes"
+
+    # sort
     books = _.sortBy books, (b) =>
       if @props.sort.indexOf("rating") isnt -1
         -b[@props.sort]
       else
         b[@props.sort]
 
-    React.DOM.ul className: "book-list",
-      BookListItem(key: book.vpl_id, book: book, showFiction: @props.onlyfiction is "no", showAvailability: @props.onlyavailable is "no") for id, book of books
+    # slice
+    hasMore = books.length > @state.numToShow
+    books = books.slice(0, @state.numToShow) if hasMore
+
+    InfiniteScroll hasMore: hasMore, loadMore: @loadMore,
+      React.DOM.ul className: "book-list",
+        BookListItem(key: book.vpl_id, book: book, showFiction: @props.onlyfiction is "no", showAvailability: @props.onlyavailable is "no") for id, book of books
+
+  loadMore: ->
+    @setState { numToShow: @state.numToShow + 10 }
 
 BookListItem = React.createClass
   displayName: "BookListItem"
@@ -68,7 +83,7 @@ BookListItem = React.createClass
       React.DOM.div className: "description", description or " "
       React.DOM.ul className: "categories",
         if goodreads_categories
-          for c in goodreads_categories when !(c in ["to-read", "currently-reading", "fiction", "non-fiction", "nonfiction", "book-club", "favorites", "novels", "novel", "before-goodreads", "to-buy", "finished"])
+          for c in goodreads_categories when !(c in ["to-read", "currently-reading", "fiction", "non-fiction", "nonfiction", "book-club", "bookclub", "favorites", "favourites", "novels", "novel", "before-goodreads", "to-buy", "finished", "kindle"])
             React.DOM.li key: c, c
       React.DOM.div className: "metadata",
         if @props.showAvailability
@@ -124,6 +139,51 @@ Checkbox = React.createClass
 
   handleChange: (ev) ->
     updateHash @props.key, if ev.target.checked then "yes" else "no"
+
+################################################################################
+# Adapted from https://github.com/guillaumervls/react-infinite-scroll
+# Copyright (c) 2013 guillaumervls, MIT License
+#
+InfiniteScroll = React.createClass
+  getDefaultProps: ->
+    hasMore: false
+    loadMore: ->
+    threshold: 250
+
+  componentDidMount: ->
+    @attachScrollListener()
+
+  componentDidUpdate: ->
+    @attachScrollListener()
+
+  componentWillUnmount: ->
+    @detachScrollListener()
+
+  render: ->
+    React.DOM.div null, @props.children
+
+  scrollListener: ->
+    el = @getDOMNode()
+    scrollTop = (if window.pageYOffset? then window.pageYOffset else (document.documentElement or document.body.parentNode or document.body).scrollTop)
+    if topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < Number(@props.threshold)
+      @detachScrollListener()
+      @props.loadMore()
+
+  attachScrollListener: ->
+    return unless @props.hasMore
+    window.addEventListener "scroll", @scrollListener
+    window.addEventListener "resize", @scrollListener
+    @scrollListener()
+
+  detachScrollListener: ->
+    window.removeEventListener "scroll", @scrollListener
+    window.removeEventListener "resize", @scrollListener
+
+topPosition = (el) ->
+  return 0 unless el
+  el.offsetTop + topPosition(el.offsetParent)
+#
+################################################################################
 
 getHash = ->
   if (h = window.location.hash) and !_.isEmpty(h)
