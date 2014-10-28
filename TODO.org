@@ -1,8 +1,3 @@
-* TODO Come up with a better name
-** Vancity Book Club Nook (or just Book Nook)
-** VPL Book Club Nook
-* TODO More thematic font for headline
-* TODO Better logo (get Joey to draw one?)
 * TODO Deploy & set up cron job to update data hourly
 * TODO Full-text search (on titles, authors, descriptions, tags)
 * TODO Show rest of description on click/hover
