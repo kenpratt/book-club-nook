@@ -206,6 +206,7 @@ boot = ->
     book.vpl_url = "http://vpl.bibliocommons.com#{book.vpl_url}"
     book.goodreads_url = "https://www.goodreads.com/book/show/#{book.goodreads_id}"
     book.available = book.availability is "Available"
+    book.description = book.description.replace(/&?nbsp;?/g, " ") if book.description
 
     if categories = book.goodreads_categories
       book.fiction = if "non-fiction" in categories or "nonfiction" in categories
