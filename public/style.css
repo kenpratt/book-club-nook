@@ -4,7 +4,6 @@ body {
 
 h1 {
     font-family: 'Lily Script One', cursive;
-    float: left;
     margin: 0 0 4px 32px;
     padding: 70px 0 0 160px;
     font-size: 50px;
@@ -15,22 +14,38 @@ h1 {
     line-height: 256px;
 }
 
+.main {
+    position: relative;
+}
+
 .settings, .book-list {
     background: white;
     border-radius: 10px;
 }
 
 .settings {
-    margin: 16px;
-    padding: 10px;
-    margin-bottom: 16px;
+    position: absolute;
+    top: -44px;
+    right: 16px;
+    margin: 0;
+    padding: 0 12px;
     border: 1px solid #ccc;
-    display: inline-block;
-    float: right;
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    line-height: 42px;
+    height: 44px;
 }
 .settings label {
     font-size: 0.9;
     margin-right: 5px;
+}
+.settings > fieldset {
+    display: inline-block;
+    padding-right: 1.5em;
+}
+.settings > fieldset:last-of-type {
+    padding-right: 0;
 }
 
 ul.book-list {
@@ -39,6 +54,7 @@ ul.book-list {
     margin: 0 16px 16px 16px;
     padding: 0;
     border: 1px solid #ccc;
+    border-top-right-radius: 0;
 }
 
 li.book-item {
