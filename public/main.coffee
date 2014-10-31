@@ -12,6 +12,8 @@ SORT_FIELDS = [
   ["random", "Random"]
 ]
 
+FILTER_OUT_TAGS = ["to-read", "to-read-library", "to-read-short-stories", "currently-reading", "fiction", "non-fiction", "nonfiction", "book-club", "bookclub", "favorites", "favourites", "novels", "novel", "before-goodreads", "to-buy", "finished", "kindle", "read-2006"]
+
 BookApp = React.createClass
   displayName: "BookApp"
 
@@ -90,7 +92,7 @@ BookListItem = React.createClass
       React.DOM.div className: "description", description or " "
       React.DOM.ul className: "categories",
         if goodreads_categories
-          for c in goodreads_categories when !(c in ["to-read", "currently-reading", "fiction", "non-fiction", "nonfiction", "book-club", "bookclub", "favorites", "favourites", "novels", "novel", "before-goodreads", "to-buy", "finished", "kindle"])
+          for c in goodreads_categories when !(c in FILTER_OUT_TAGS)
             React.DOM.li key: c, c
       React.DOM.div className: "metadata",
         if @props.showAvailability
