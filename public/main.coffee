@@ -108,9 +108,9 @@ BookListItem = React.createClass
 
   renderRating: (val, outOf) ->
     if val?
-      stars = Math.round(val / outOf * 6) + 1
+      pct = Math.round(val / outOf * 100)
       React.DOM.span className: "rating",
-        React.DOM.span className: "stars-#{stars}"
+        React.DOM.span className: "stars", style: { width: "#{pct}%" }
     else
       "-"
 
