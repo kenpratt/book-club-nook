@@ -8,6 +8,7 @@ SORT_FIELDS = [
   ["amazon_rating", "Amazon Rating"]
   ["title", "Title"]
   ["author", "Author"]
+  ["random", "Random"]
 ]
 
 BookApp = React.createClass
@@ -50,10 +51,13 @@ BookList = React.createClass
 
     # sort
     books = _.sortBy books, (b) =>
-      if @props.sort.indexOf("rating") isnt -1
-        -b[@props.sort]
-      else
-        b[@props.sort]
+      switch @props.sort
+        when "goodreads_rating", "amazon_rating"
+          -b[@props.sort]
+        when "random"
+          Math.random()
+        else
+          b[@props.sort]
 
     # slice
     hasMore = books.length > @state.numToShow
