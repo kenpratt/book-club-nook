@@ -6,6 +6,7 @@ DEFAULT_SETTINGS =
 SORT_FIELDS = [
   ["goodreads_rating", "Goodreads Rating"]
   ["amazon_rating", "Amazon Rating"]
+  ["vpl_rating", "VPL Rating"]
   ["title", "Title"]
   ["author", "Author"]
   ["random", "Random"]
@@ -52,7 +53,7 @@ BookList = React.createClass
     # sort
     books = _.sortBy books, (b) =>
       switch @props.sort
-        when "goodreads_rating", "amazon_rating"
+        when "goodreads_rating", "amazon_rating", "vpl_rating"
           -b[@props.sort]
         when "random"
           Math.random()
@@ -98,12 +99,12 @@ BookListItem = React.createClass
             React.DOM.span className: "holds", "(#{holds.replace(/Holds: (\d+)/, '$1 holds')})" if holds
         if @props.showFiction
           React.DOM.div className: "fiction yesno #{if fiction then 'yes' else 'no'}", "Fiction:"
-        # React.DOM.div className: "vpl-rating",
-        #   React.DOM.a href: vpl_url, @renderRating(vpl_rating, 100)
-        React.DOM.div className: "amazon-rating",
-          React.DOM.a href: amazon_url, @renderRating(amazon_rating, 1)
         React.DOM.div className: "goodreads-rating",
           React.DOM.a href: goodreads_url, @renderRating(goodreads_rating, 5)
+        React.DOM.div className: "amazon-rating",
+          React.DOM.a href: amazon_url, @renderRating(amazon_rating, 1)
+        React.DOM.div className: "vpl-rating",
+          React.DOM.a href: vpl_url, @renderRating(vpl_rating, 100)
 
   renderRating: (val, outOf) ->
     if val?
