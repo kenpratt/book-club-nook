@@ -2,6 +2,7 @@ DEFAULT_SETTINGS =
   sort: "goodreads_rating"
   onlyfiction: "yes"
   onlyavailable: "no"
+  query: ""
 
 SORT_FIELDS = [
   ["goodreads_rating", "Goodreads Rating"]
@@ -11,6 +12,8 @@ SORT_FIELDS = [
   ["author", "Author"]
   ["random", "Random"]
 ]
+
+SEARCHABLE_BOOK_FIELDS = ["title", "author", "description", "tags_string"]
 
 FILTER_OUT_TAGS = ["to-read", "to-read-library", "to-read-short-stories", "currently-reading", "fiction", "non-fiction", "nonfiction", "book-club", "bookclub", "favorites", "favourites", "novels", "novel", "before-goodreads", "to-buy", "finished", "kindle", "read-2006"]
 
@@ -37,7 +40,7 @@ BookApp = React.createClass
       React.DOM.h1 null, "The VanCity Book Club Nook"
       React.DOM.div className: "main",
         Settings(settings: @state.settings)
-        BookList(books: @state.books, sort: @state.settings.sort, onlyfiction: @state.settings.onlyfiction, onlyavailable: @state.settings.onlyavailable)
+        BookList(books: @state.books, sort: @state.settings.sort, onlyfiction: @state.settings.onlyfiction, onlyavailable: @state.settings.onlyavailable, query: @state.settings.query)
 
 BookList = React.createClass
   displayName: "BookList"
@@ -51,6 +54,7 @@ BookList = React.createClass
     # filter
     books = (b for b in books when b.fiction) if @props.onlyfiction is "yes"
     books = (b for b in books when b.available) if @props.onlyavailable is "yes"
+    books = (b for b in books when matchesQuery(b, query)) if (query = @props.query) and !_.isEmpty(query)
 
     # sort
     books = _.sortBy books, (b) =>
@@ -123,6 +127,7 @@ Settings = React.createClass
       Dropdown(key: "sort", id: "sort-setting", value: @props.settings.sort, label: "Sort by:", options: SORT_FIELDS)
       Checkbox(key: "onlyfiction", id: "only-fiction-setting", value: @props.settings.onlyfiction, label: "Fiction only?")
       Checkbox(key: "onlyavailable", id: "only-available-setting", value: @props.settings.onlyavailable, label: "Available sets only?")
+      TextField(key: "query", id: "query-setting", value: @props.settings.query, label: "Search:")
 
 Dropdown = React.createClass
   displayName: "Dropdown"
@@ -138,7 +143,7 @@ Dropdown = React.createClass
     updateHash @props.key, ev.target.value
 
 Checkbox = React.createClass
-  displayName: "CheckBox"
+  displayName: "Checkbox"
 
   render: ->
     React.DOM.fieldset null,
@@ -147,6 +152,17 @@ Checkbox = React.createClass
 
   handleChange: (ev) ->
     updateHash @props.key, if ev.target.checked then "yes" else "no"
+
+TextField = React.createClass
+  displayName: "TextField"
+
+  render: ->
+    React.DOM.fieldset null,
+      React.DOM.label htmlFor: @props.id, @props.label
+      React.DOM.input id: @props.id, type: "text", name: @props.key, value: @props.value, onChange: @handleChange
+
+  handleChange: (ev) ->
+    updateHash @props.key, ev.target.value
 
 ################################################################################
 # Adapted from https://github.com/guillaumervls/react-infinite-scroll
@@ -206,9 +222,10 @@ getHash = ->
 updateHash = (key, val) ->
   h = getHash()
   h[key] = val
-  window.location.hash = "#" + ("#{k}=#{v}" for k, v of h).join("&")
+  window.location.hash = "#" + ("#{k}=#{v}" for k, v of h when v and !_.isEmpty(v)).join("&")
 
-boot = ->
+cleanBookData = ->
+  # will be present in window.bookData, defined in the auto-generated books.js file
   for id, book of bookData
     book.vpl_url = "http://vpl.bibliocommons.com#{book.vpl_url}"
     book.goodreads_url = "https://www.goodreads.com/book/show/#{book.goodreads_id}"
@@ -229,6 +246,17 @@ boot = ->
       book.tags = []
       book.fiction = false
 
+    # stringify tags for text search
+    book.tags_string = book.tags.join(" ")
+
+matchesQuery = (book, query) ->
+  re = new RegExp(query, "i")
+  for f in SEARCHABLE_BOOK_FIELDS
+    return true if book[f] and re.test(book[f])
+  false
+
+boot = ->
+  cleanBookData()
   React.renderComponent(BookApp(), document.getElementsByTagName("body")[0])
 
 boot()

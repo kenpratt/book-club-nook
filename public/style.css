@@ -5,8 +5,8 @@ body {
 h1 {
     font-family: 'Lily Script One', cursive;
     margin: 0 0 4px 32px;
-    padding: 70px 0 0 160px;
-    font-size: 50px;
+    padding: 5px 0 0 170px;
+    font-size: 64px;
     line-height: 1;
     color: rgb(102, 83, 14);
     background: url(images/logo.png) no-repeat top left;
@@ -46,6 +46,10 @@ h1 {
 }
 .settings > fieldset:last-of-type {
     padding-right: 0;
+}
+.settings > fieldset > input[type="text"] {
+    line-height: 1;
+    font-size: 80%;
 }
 
 ul.book-list {

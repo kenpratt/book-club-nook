@@ -1,5 +1,3 @@
-* TODO Deploy & set up cron job to update data hourly
-* TODO Full-text search (on titles, authors, descriptions, tags)
 * TODO Show rest of description on click/hover
 * TODO Filter out books we've already read
 * TODO Find book club-centric site(s) to pull data from?
