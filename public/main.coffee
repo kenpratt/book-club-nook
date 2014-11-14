@@ -17,7 +17,7 @@ SEARCHABLE_BOOK_FIELDS = ["title", "author", "description", "tags_string"]
 
 FILTER_OUT_TAGS = ["to-read", "to-read-library", "to-read-short-stories", "currently-reading", "fiction", "non-fiction", "nonfiction", "book-club", "bookclub", "favorites", "favourites", "novels", "novel", "before-goodreads", "to-buy", "finished", "kindle", "read-2006"]
 
-BookApp = React.createClass
+BookApp = React.createFactory React.createClass
   displayName: "BookApp"
 
   getInitialState: ->
@@ -42,7 +42,7 @@ BookApp = React.createClass
         Settings(settings: @state.settings)
         BookList(books: @state.books, sort: @state.settings.sort, onlyfiction: @state.settings.onlyfiction, onlyavailable: @state.settings.onlyavailable, query: @state.settings.query)
 
-BookList = React.createClass
+BookList = React.createFactory React.createClass
   displayName: "BookList"
 
   getInitialState: ->
@@ -81,7 +81,7 @@ BookList = React.createClass
   loadMore: ->
     @setState { numToShow: @state.numToShow + 10 }
 
-BookListItem = React.createClass
+BookListItem = React.createFactory React.createClass
   displayName: "BookListItem"
 
   shouldComponentUpdate: (nextProps, nextState) ->
@@ -123,17 +123,17 @@ BookListItem = React.createClass
     else
       "-"
 
-Settings = React.createClass
+Settings = React.createFactory React.createClass
   displayName: "Settings"
 
   render: ->
     React.DOM.form className: "settings",
-      Dropdown(key: "sort", id: "sort-setting", value: @props.settings.sort, label: "Sort by:", options: SORT_FIELDS)
-      Checkbox(key: "onlyfiction", id: "only-fiction-setting", value: @props.settings.onlyfiction, label: "Fiction only?")
-      Checkbox(key: "onlyavailable", id: "only-available-setting", value: @props.settings.onlyavailable, label: "Available sets only?")
-      TextField(key: "query", id: "query-setting", value: @props.settings.query, label: "Search:")
+      Dropdown(property: "sort", id: "sort-setting", value: @props.settings.sort, label: "Sort by:", options: SORT_FIELDS)
+      Checkbox(property: "onlyfiction", id: "only-fiction-setting", value: @props.settings.onlyfiction, label: "Fiction only?")
+      Checkbox(property: "onlyavailable", id: "only-available-setting", value: @props.settings.onlyavailable, label: "Available sets only?")
+      TextField(property: "query", id: "query-setting", value: @props.settings.query, label: "Search:")
 
-Dropdown = React.createClass
+Dropdown = React.createFactory React.createClass
   displayName: "Dropdown"
 
   render: ->
@@ -144,35 +144,35 @@ Dropdown = React.createClass
           React.DOM.option key: key, value: key, name
 
   handleChange: (ev) ->
-    updateHash @props.key, ev.target.value
+    updateHash @props.property, ev.target.value
 
-Checkbox = React.createClass
+Checkbox = React.createFactory React.createClass
   displayName: "Checkbox"
 
   render: ->
     React.DOM.fieldset null,
       React.DOM.label htmlFor: @props.id, @props.label
-      React.DOM.input id: @props.id, type: "checkbox", name: @props.key, value: "yes", checked: @props.value is "yes", onChange: @handleChange
+      React.DOM.input id: @props.id, type: "checkbox", name: @props.property, value: "yes", checked: @props.value is "yes", onChange: @handleChange
 
   handleChange: (ev) ->
-    updateHash @props.key, if ev.target.checked then "yes" else "no"
+    updateHash @props.property, if ev.target.checked then "yes" else "no"
 
-TextField = React.createClass
+TextField = React.createFactory React.createClass
   displayName: "TextField"
 
   render: ->
     React.DOM.fieldset null,
       React.DOM.label htmlFor: @props.id, @props.label
-      React.DOM.input id: @props.id, type: "text", name: @props.key, value: @props.value, onChange: @handleChange
+      React.DOM.input id: @props.id, type: "text", name: @props.property, value: @props.value, onChange: @handleChange
 
   handleChange: (ev) ->
-    updateHash @props.key, ev.target.value
+    updateHash @props.property, ev.target.value
 
 ################################################################################
 # Adapted from https://github.com/guillaumervls/react-infinite-scroll
 # Copyright (c) 2013 guillaumervls, MIT License
 #
-InfiniteScroll = React.createClass
+InfiniteScroll = React.createFactory React.createClass
   getDefaultProps: ->
     hasMore: false
     loadMore: ->
@@ -261,6 +261,6 @@ matchesQuery = (book, query) ->
 
 boot = ->
   cleanBookData()
-  React.renderComponent(BookApp(), document.getElementsByTagName("body")[0])
+  React.render(BookApp(), document.getElementsByTagName("body")[0])
 
 boot()
