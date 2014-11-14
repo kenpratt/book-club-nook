@@ -1,3 +1,7 @@
+html {
+    min-height: 100%;
+}
+
 body {
     background: linear-gradient(to right, rgba(210, 180, 140, 0.5), rgba(210, 180, 140, 1.0));
 }
@@ -61,15 +65,18 @@ ul.book-list {
     border-top-right-radius: 0;
 }
 
-li.book-item {
+ul.book-list > li {
     position: relative;
     margin: 0;
     padding: 10px;
     overflow: hidden;
     border-bottom: 1px solid #ccc;
 }
-li.book-item:last-of-type {
+ul.book-list > li:last-of-type {
     border-bottom: 0;
+}
+ul.book-list > li.no-results {
+    font-style: italic;
 }
 
 .cover {

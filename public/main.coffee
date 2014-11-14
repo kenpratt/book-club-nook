@@ -70,9 +70,13 @@ BookList = React.createClass
     hasMore = books.length > @state.numToShow
     books = books.slice(0, @state.numToShow) if hasMore
 
-    InfiniteScroll hasMore: hasMore, loadMore: @loadMore,
+    unless _.isEmpty(books)
+      InfiniteScroll hasMore: hasMore, loadMore: @loadMore,
+        React.DOM.ul className: "book-list",
+          BookListItem(key: book.vpl_id, book: book, showFiction: @props.onlyfiction is "no", showAvailability: @props.onlyavailable is "no") for id, book of books
+    else
       React.DOM.ul className: "book-list",
-        BookListItem(key: book.vpl_id, book: book, showFiction: @props.onlyfiction is "no", showAvailability: @props.onlyavailable is "no") for id, book of books
+        React.DOM.li className: "no-results", "Sorry, no books match that set of criteria."
 
   loadMore: ->
     @setState { numToShow: @state.numToShow + 10 }
@@ -86,7 +90,7 @@ BookListItem = React.createClass
   render: ->
     { vpl_id, title, vpl_url, author, availability, available, availability_url, holds, vpl_rating, isbn, img, goodreads_id, goodreads_url, goodreads_rating, amazon_url, amazon_rating, tags, description, fiction } = @props.book
 
-    React.DOM.li className: "book-item",
+    React.DOM.li {},
       React.DOM.div className: "cover",
         React.DOM.a href: vpl_url,
           React.DOM.img src: img
