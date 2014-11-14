@@ -1,4 +1,6 @@
+* TODO Index books for full-text search
 * TODO Show rest of description on click/hover
+* TODO Check for easy performance optimization
 * TODO Filter out books we've already read
 * TODO Find book club-centric site(s) to pull data from?
 ** TODO LitLovers badges http://www.litlovers.com/popular-book-club-books#top-50 http://www.litlovers.com/popular-books-2
