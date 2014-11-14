@@ -295,7 +295,13 @@ cleanBookData = ->
 # Check if a book matches a search query term.
 #
 matchesQuery = (book, query) ->
-  re = new RegExp(query, "i")
+  terms = query.trim().split(/\s+/)
+  for term in terms
+    return false unless matchesTerm(book, term)
+  true
+
+matchesTerm = (book, term) ->
+  re = new RegExp(term, "i")
   for f in SEARCHABLE_BOOK_FIELDS
     return true if book[f] and re.test(book[f])
   false
