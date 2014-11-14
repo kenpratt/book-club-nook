@@ -80,7 +80,7 @@ BookListItem = React.createClass
     @props.book isnt nextProps.book or @props.showFiction isnt nextProps.showFiction or @props.showAvailability isnt nextProps.showAvailability
 
   render: ->
-    { vpl_id, title, vpl_url, author, availability, available, availability_url, holds, vpl_rating, isbn, img, goodreads_id, goodreads_url, goodreads_rating, amazon_url, amazon_rating, goodreads_categories, description, fiction } = @props.book
+    { vpl_id, title, vpl_url, author, availability, available, availability_url, holds, vpl_rating, isbn, img, goodreads_id, goodreads_url, goodreads_rating, amazon_url, amazon_rating, tags, description, fiction } = @props.book
 
     React.DOM.li className: "book-item",
       React.DOM.div className: "cover",
@@ -91,9 +91,8 @@ BookListItem = React.createClass
       React.DOM.h4 className: "author", author
       React.DOM.div className: "description", description or " "
       React.DOM.ul className: "categories",
-        if goodreads_categories
-          for c in goodreads_categories when !(c in FILTER_OUT_TAGS)
-            React.DOM.li key: c, c
+        for c in tags
+          React.DOM.li key: c, c
       React.DOM.div className: "metadata",
         if @props.showAvailability
           React.DOM.div className: "availability",
@@ -217,6 +216,7 @@ boot = ->
     book.description = book.description.replace(/&?nbsp;?/g, " ") if book.description
 
     if categories = book.goodreads_categories
+      book.tags = (c for c in categories when !(c in FILTER_OUT_TAGS))
       book.fiction = if "non-fiction" in categories or "nonfiction" in categories
         false
       else if "fiction" in categories or "mystery" in categories or "fantasy" in categories
@@ -225,6 +225,9 @@ boot = ->
         true
       else
         false
+    else
+      book.tags = []
+      book.fiction = false
 
   React.renderComponent(BookApp(), document.getElementsByTagName("body")[0])
 
